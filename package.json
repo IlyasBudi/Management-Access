@@ -1,0 +1,30 @@
+{
+  "name": "management-access",
+  "version": "1.0.0",
+  "description": "Express.js + PostgreSQL with MVC Architecture",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "migrate": "node migrations/migrate.js",
+    "reset": "node migrations/reset.js",
+    "migrate:rollback": "node migrations/rollback.js",
+    "seed": "node seeders/index.js"
+  },
+  "keywords": ["express", "postgresql", "mvc"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.3.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
