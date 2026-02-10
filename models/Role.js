@@ -142,7 +142,8 @@ class Role {
     const query = `
       UPDATE roles
       SET name = COALESCE($1, name),
-          description = COALESCE($2, description)
+          description = COALESCE($2, description),
+          updated_at = CURRENT_TIMESTAMP
       WHERE id = $3
       RETURNING *
     `;
