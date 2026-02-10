@@ -449,10 +449,6 @@ class DatabaseSeeder {
       console.log('     - Staff (Read-only permission)');
       console.log('   Access: Depends on selected role');
       
-      console.log('\n📝 Permission Hierarchy:');
-      console.log('   - User level: Permission di user_roles');
-      console.log('   - Role level: Permission di roles table');
-      console.log('   - Menu level: Permission di role_menus');
       console.log('══════════════════════════════════════\n');
     } finally {
       client.release();
