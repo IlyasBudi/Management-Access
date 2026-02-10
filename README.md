@@ -48,6 +48,109 @@
 
 ---
 
+## Default Users & Login Credentials
+
+Berikut adalah daftar user default yang dibuat saat database seeding:
+
+### 1. Super Admin
+- **Username:** `superadmin`
+- **Password:** `superadmin123`
+- **Full Name:** Super Administrator
+- **Role:** Super Admin
+- **Access:** Full CRUD (Create, Read, Update, Delete) ke semua menu
+
+### 2. Karyawan 1
+- **Username:** `karyawan1`
+- **Password:** `karyawan123`
+- **Full Name:** Karyawan Satu
+- **Roles:** Manager + Staff (Jabatan Ganda)
+- **Access:** Akses bergantung pada role yang dipilih saat login
+  - Sebagai Manager: CRU (Create, Read, Update) ke Menu 1 & Menu 2
+  - Sebagai Staff: Read only ke Menu 3
+
+### 3. Karyawan 2
+- **Username:** `karyawan2`
+- **Password:** `karyawan123`
+- **Full Name:** Karyawan Dua
+- **Role:** Manager
+- **Access:** CRU (Create, Read, Update) ke Menu 1 & Menu 2 (tanpa Delete)
+
+### 4. Karyawan 3
+- **Username:** `karyawan3`
+- **Password:** `karyawan123`
+- **Full Name:** Karyawan Tiga
+- **Role:** Staff
+- **Access:** Read only ke Menu 3
+
+### 5. Karyawan 4
+- **Username:** `karyawan4`
+- **Password:** `karyawan123`
+- **Full Name:** Karyawan Empat
+- **Roles:** Manager + Staff (Jabatan Ganda)
+- **Access:** Akses bergantung pada role yang dipilih saat login
+  - Sebagai Manager: CRU (Create, Read, Update) ke Menu 1 & Menu 2
+  - Sebagai Staff: Read only ke Menu 3
+
+---
+
+## Roles & Permissions
+
+Berikut adalah daftar roles beserta permission yang dimiliki:
+
+### 1. Super Admin
+**Deskripsi:** Super administrator dengan akses penuh
+
+**Permissions:**
+- ✅ Full CRUD (Create, Read, Update, Delete) ke **semua menu**
+- ✅ Dapat mengelola users (create, update, delete, assign roles)
+- ✅ Dapat mengelola roles (create, update, delete, assign menus)
+- ✅ Dapat mengelola menus (create, update, delete)
+- ✅ Akses ke semua endpoint API
+
+**Menu Access:**
+- Menu 1 (dan semua submenu) - CRUD
+- Menu 2 (dan semua submenu) - CRUD
+- Menu 3 (dan semua submenu) - CRUD
+
+### 2. Manager
+**Deskripsi:** Manager dengan akses management
+
+**Permissions:**
+- ✅ Can Create, Read, Update (tanpa Delete) ke Menu 1 & Menu 2
+- ✅ Dapat melihat daftar users (read only)
+- ❌ Tidak dapat mengelola users, roles, atau menus
+- ❌ Tidak memiliki akses ke Menu 3
+
+**Menu Access:**
+- Menu 1 (dan semua submenu):
+  - Menu 1.1
+  - Menu 1.2 (Menu 1.2.1, Menu 1.2.2)
+  - Menu 1.3 (Menu 1.3.1)
+  - **Permission:** Create ✅, Read ✅, Update ✅, Delete ❌
+- Menu 2 (dan semua submenu):
+  - Menu 2.1
+  - Menu 2.2 (Menu 2.2.1, Menu 2.2.2, Menu 2.2.3)
+  - Menu 2.2.2 (Menu 2.2.2.1, Menu 2.2.2.2)
+  - Menu 2.3
+  - **Permission:** Create ✅, Read ✅, Update ✅, Delete ❌
+
+### 3. Staff
+**Deskripsi:** Staff dengan akses terbatas
+
+**Permissions:**
+- ✅ Read only ke Menu 3
+- ❌ Tidak dapat create, update, atau delete menu apapun
+- ❌ Tidak dapat mengelola users atau roles
+- ❌ Tidak memiliki akses ke Menu 1 & Menu 2
+
+**Menu Access:**
+- Menu 3 (dan semua submenu):
+  - Menu 3.1
+  - Menu 3.2
+  - **Permission:** Create ❌, Read ✅, Update ❌, Delete ❌
+
+---
+
 ## Daftar Isi
 
 1. [Authentication](#authentication)
