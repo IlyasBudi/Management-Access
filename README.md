@@ -136,7 +136,7 @@ Berikut adalah daftar roles beserta permission yang dimiliki:
 
 **Permissions:**
 - ✅ Can Create, Read, Update (tanpa Delete) ke Menu 1 & Menu 2
-- ✅ Dapat melihat daftar users (read only)
+- ✅ Dapat melihat daftar users dan detail users (read only)
 - ❌ Tidak dapat mengelola users, roles, atau menus
 - ❌ Tidak memiliki akses ke Menu 3
 
