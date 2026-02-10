@@ -27,6 +27,10 @@ const migrations = [
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) UNIQUE NOT NULL,
         description TEXT,
+        can_create BOOLEAN DEFAULT false,
+        can_read BOOLEAN DEFAULT true,
+        can_update BOOLEAN DEFAULT false,
+        can_delete BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `,
@@ -41,6 +45,10 @@ const migrations = [
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         role_id INTEGER NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
+        can_create BOOLEAN DEFAULT false,
+        can_read BOOLEAN DEFAULT true,
+        can_update BOOLEAN DEFAULT false,
+        can_delete BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(user_id, role_id)

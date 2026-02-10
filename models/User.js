@@ -27,7 +27,13 @@ class User {
           json_build_object(
             'role_id', r.id,
             'role_name', r.name,
-            'description', r.description
+            'description', r.description,
+            'permissions', json_build_object(
+              'can_create', ur.can_create,
+              'can_read', ur.can_read,
+              'can_update', ur.can_update,
+              'can_delete', ur.can_delete
+            )
           )
         ) FILTER (WHERE r.id IS NOT NULL) as roles
       FROM users u
@@ -210,14 +216,34 @@ class User {
   }
 
   // Assign role to user (untuk jabatan ganda)
-  static async assignRole(userId, roleId) {
+  static async assignRole(userId, roleId, permissions = {}) {
+    const {
+      can_create = false,
+      can_read = true,
+      can_update = false,
+      can_delete = false
+    } = permissions;
+
     const query = `
-      INSERT INTO user_roles (user_id, role_id)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id, role_id) DO NOTHING
+      INSERT INTO user_roles (user_id, role_id, can_create, can_read, can_update, can_delete)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      ON CONFLICT (user_id, role_id)
+      DO UPDATE SET
+        can_create = $3,
+        can_read = $4,
+        can_update = $5,
+        can_delete = $6,
+        updated_at = CURRENT_TIMESTAMP
       RETURNING *
     `;
-    const result = await pool.query(query, [userId, roleId]);
+    const result = await pool.query(query, [
+      userId,
+      roleId,
+      can_create,
+      can_read,
+      can_update,
+      can_delete
+    ]);
     return result.rows[0];
   }
 

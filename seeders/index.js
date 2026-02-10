@@ -67,9 +67,30 @@ class DatabaseSeeder {
   // Seed Roles (Hanya 3: Super Admin, Manager, Staff)
   static async seedRoles() {
     const rolesData = [
-      { name: 'Super Admin', description: 'Super administrator dengan akses penuh' },
-      { name: 'Manager', description: 'Manager dengan akses management' },
-      { name: 'Staff', description: 'Staff dengan akses terbatas' }
+      { 
+        name: 'Super Admin', 
+        description: 'Super administrator dengan akses penuh',
+        can_create: true,
+        can_read: true,
+        can_update: true,
+        can_delete: true
+      },
+      { 
+        name: 'Manager', 
+        description: 'Manager dengan akses management',
+        can_create: true,
+        can_read: true,
+        can_update: true,
+        can_delete: false
+      },
+      { 
+        name: 'Staff', 
+        description: 'Staff dengan akses terbatas',
+        can_create: false,
+        can_read: true,
+        can_update: false,
+        can_delete: false
+      }
     ];
 
     const roles = [];
@@ -104,22 +125,57 @@ class DatabaseSeeder {
   static async assignUserRoles(users, roles) {
     const [superAdmin, manager, staff] = roles;
 
-    // superadmin -> Super Admin role
-    await User.assignRole(users[0].id, superAdmin.id);
+    // superadmin -> Super Admin role (Full CRUD)
+    await User.assignRole(users[0].id, superAdmin.id, {
+      can_create: true,
+      can_read: true,
+      can_update: true,
+      can_delete: true
+    });
 
-    // karyawan1 -> Manager + Staff (jabatan ganda)
-    await User.assignRole(users[1].id, manager.id);
-    await User.assignRole(users[1].id, staff.id);
+    // karyawan1 -> Manager (CRU) + Staff (Read only)
+    await User.assignRole(users[1].id, manager.id, {
+      can_create: true,
+      can_read: true,
+      can_update: true,
+      can_delete: false
+    });
+    await User.assignRole(users[1].id, staff.id, {
+      can_create: false,
+      can_read: true,
+      can_update: false,
+      can_delete: false
+    });
 
-    // karyawan2 -> Manager only
-    await User.assignRole(users[2].id, manager.id);
+    // karyawan2 -> Manager only (CRU)
+    await User.assignRole(users[2].id, manager.id, {
+      can_create: true,
+      can_read: true,
+      can_update: true,
+      can_delete: false
+    });
 
-    // karyawan3 -> Staff only
-    await User.assignRole(users[3].id, staff.id);
+    // karyawan3 -> Staff only (Read only)
+    await User.assignRole(users[3].id, staff.id, {
+      can_create: false,
+      can_read: true,
+      can_update: false,
+      can_delete: false
+    });
 
-    // karyawan4 -> Manager + Staff (jabatan ganda)
-    await User.assignRole(users[4].id, manager.id);
-    await User.assignRole(users[4].id, staff.id);
+    // karyawan4 -> Manager (CRU) + Staff (Read only)
+    await User.assignRole(users[4].id, manager.id, {
+      can_create: true,
+      can_read: true,
+      can_update: true,
+      can_delete: false
+    });
+    await User.assignRole(users[4].id, staff.id, {
+      can_create: false,
+      can_read: true,
+      can_update: false,
+      can_delete: false
+    });
   }
 
   // Seed Menus
@@ -356,32 +412,47 @@ class DatabaseSeeder {
       console.log('1. Super Admin:');
       console.log('   Username: superadmin');
       console.log('   Password: superadmin123');
-      console.log('   Role: Super Admin');
-      console.log('   Access: Full CRUD ke semua menu');
+      console.log('   Role: Super Admin (CRUD)');
+      console.log('   User Permission: Full CRUD');
+      console.log('   Role Permission: Full CRUD');
+      console.log('   Menu Access: Full CRUD ke semua menu');
       
       console.log('\n2. Karyawan 1 (Jabatan Ganda):');
       console.log('   Username: karyawan1');
       console.log('   Password: karyawan123');
-      console.log('   Roles: Manager + Staff');
+      console.log('   Roles:');
+      console.log('     - Manager (CRU permission)');
+      console.log('     - Staff (Read-only permission)');
       console.log('   Access: Depends on selected role');
       
       console.log('\n3. Karyawan 2:');
       console.log('   Username: karyawan2');
       console.log('   Password: karyawan123');
-      console.log('   Role: Manager');
-      console.log('   Access: CRU ke Menu 1 & 2');
+      console.log('   Role: Manager (CRU permission)');
+      console.log('   User Permission: CRU');
+      console.log('   Role Permission: CRU');
+      console.log('   Menu Access: CRU ke Menu 1 & 2');
       
       console.log('\n4. Karyawan 3:');
       console.log('   Username: karyawan3');
       console.log('   Password: karyawan123');
-      console.log('   Role: Staff');
-      console.log('   Access: Read only ke Menu 3');
+      console.log('   Role: Staff (Read-only permission)');
+      console.log('   User Permission: Read only');
+      console.log('   Role Permission: Read only');
+      console.log('   Menu Access: Read only ke Menu 3');
       
       console.log('\n5. Karyawan 4 (Jabatan Ganda):');
       console.log('   Username: karyawan4');
       console.log('   Password: karyawan123');
-      console.log('   Roles: Manager + Staff');
+      console.log('   Roles:');
+      console.log('     - Manager (CRU permission)');
+      console.log('     - Staff (Read-only permission)');
       console.log('   Access: Depends on selected role');
+      
+      console.log('\n📝 Permission Hierarchy:');
+      console.log('   - User level: Permission di user_roles');
+      console.log('   - Role level: Permission di roles table');
+      console.log('   - Menu level: Permission di role_menus');
       console.log('══════════════════════════════════════\n');
     } finally {
       client.release();

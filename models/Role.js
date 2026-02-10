@@ -43,7 +43,13 @@ class Role {
             'user_id', u.id,
             'username', u.username,
             'full_name', u.full_name,
-            'is_active', u.is_active
+            'is_active', u.is_active,
+            'permissions', json_build_object(
+              'can_create', ur.can_create,
+              'can_read', ur.can_read,
+              'can_update', ur.can_update,
+              'can_delete', ur.can_delete
+            )
           )
         ) FILTER (WHERE u.id IS NOT NULL) as users
       FROM roles r
@@ -124,29 +130,55 @@ class Role {
 
   // Create new role
   static async create(roleData) {
-    const { name, description } = roleData;
+    const { 
+      name, 
+      description,
+      can_create = false,
+      can_read = true,
+      can_update = false,
+      can_delete = false
+    } = roleData;
     
     const query = `
-      INSERT INTO roles (name, description)
-      VALUES ($1, $2)
+      INSERT INTO roles (name, description, can_create, can_read, can_update, can_delete)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *
     `;
-    const result = await pool.query(query, [name, description]);
+    const result = await pool.query(query, [
+      name, 
+      description, 
+      can_create, 
+      can_read, 
+      can_update, 
+      can_delete
+    ]);
     return result.rows[0];
   }
 
   // Update role
   static async update(id, roleData) {
-    const { name, description } = roleData;
+    const { name, description, can_create, can_read, can_update, can_delete } = roleData;
     
     const query = `
       UPDATE roles
       SET name = COALESCE($1, name),
-          description = COALESCE($2, description)
-      WHERE id = $3
+          description = COALESCE($2, description),
+          can_create = COALESCE($3, can_create),
+          can_read = COALESCE($4, can_read),
+          can_update = COALESCE($5, can_update),
+          can_delete = COALESCE($6, can_delete)
+      WHERE id = $7
       RETURNING *
     `;
-    const result = await pool.query(query, [name, description, id]);
+    const result = await pool.query(query, [
+      name, 
+      description, 
+      can_create, 
+      can_read, 
+      can_update, 
+      can_delete, 
+      id
+    ]);
     return result.rows[0];
   }
 
@@ -170,14 +202,34 @@ class Role {
   }
 
   // Assign user to role
-  static async assignUser(roleId, userId) {
+  static async assignUser(roleId, userId, permissions = {}) {
+    const {
+      can_create = false,
+      can_read = true,
+      can_update = false,
+      can_delete = false
+    } = permissions;
+
     const query = `
-      INSERT INTO user_roles (user_id, role_id)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id, role_id) DO NOTHING
+      INSERT INTO user_roles (user_id, role_id, can_create, can_read, can_update, can_delete)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      ON CONFLICT (user_id, role_id) 
+      DO UPDATE SET
+        can_create = $3,
+        can_read = $4,
+        can_update = $5,
+        can_delete = $6,
+        updated_at = CURRENT_TIMESTAMP
       RETURNING *
     `;
-    const result = await pool.query(query, [userId, roleId]);
+    const result = await pool.query(query, [
+      userId, 
+      roleId, 
+      can_create, 
+      can_read, 
+      can_update, 
+      can_delete
+    ]);
     return result.rows[0];
   }
 
