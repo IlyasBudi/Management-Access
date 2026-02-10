@@ -37,7 +37,7 @@ async function rollbackMigrations() {
   const client = await pool.connect();
   
   try {
-    console.log('🔄 Starting rollback...\n');
+    console.log('Starting rollback...\n');
 
     for (const migration of migrations) {
       // Check if migration exists
@@ -66,7 +66,7 @@ async function rollbackMigrations() {
     console.log('✓ Rollback completed successfully!');
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error('❌ Rollback failed:', error.message);
+    console.error('Rollback failed:', error.message);
     throw error;
   } finally {
     client.release();

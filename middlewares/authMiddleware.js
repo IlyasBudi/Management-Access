@@ -74,48 +74,28 @@ const checkPermission = (permission) => {
   };
 };
 
-// Middleware to check if user is Super Admin
-const isSuperAdmin = async (req, res, next) => {
-  try {
-    const { role_name } = req.user;
+// Middleware to check if user has one of the allowed roles
+const checkRoles = (...allowedRoles) => {
+  return async (req, res, next) => {
+    try {
+      const { role_name } = req.user;
 
-    if (role_name !== 'Super Admin') {
-      return res.status(403).json({
+      if (!allowedRoles.includes(role_name)) {
+        return res.status(403).json({
+          success: false,
+          message: `Akses ditolak. Hanya ${allowedRoles.join(' atau ')} yang dapat melakukan operasi ini.`
+        });
+      }
+
+      next();
+    } catch (error) {
+      return res.status(500).json({
         success: false,
-        message: 'Akses ditolak. Hanya Super Admin yang dapat melakukan operasi ini.'
+        message: 'Error checking role',
+        error: error.message
       });
     }
-
-    next();
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Error checking role',
-      error: error.message
-    });
-  }
+  };
 };
 
-// Middleware to check if user is Manager
-const isManager = async (req, res, next) => {
-  try {
-    const { role_name } = req.user;
-
-    if (role_name !== 'Manager') {
-      return res.status(403).json({
-        success: false,
-        message: 'Akses ditolak. Hanya Manager yang dapat melakukan operasi ini.'
-      });
-    }
-
-    next();
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Error checking role',
-      error: error.message
-    });
-  }
-};
-
-module.exports = { authMiddleware, checkPermission, isSuperAdmin, isManager };
+module.exports = { authMiddleware, checkPermission, checkRoles };
