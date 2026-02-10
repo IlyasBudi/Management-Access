@@ -285,14 +285,3 @@ curl -X POST http://localhost:3000/api/roles/2/menus \
 ---
 
 **Total Endpoints:** 38  
-**API Version:** 1.0.0  
-**Last Updated:** February 9, 2026
-
----
-
-## Support & Contact
-
-For questions or issues:
-- Check [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for detailed specs
-- Check [FRONTEND_INTEGRATION_GUIDE.md](./FRONTEND_INTEGRATION_GUIDE.md) for code examples
-- Import [Management Access.postman_collection.json](./Management%20Access.postman_collection.json) for testing

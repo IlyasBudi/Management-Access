@@ -7,6 +7,47 @@
 
 ---
 
+## Database Models
+
+### User
+- id
+- username (unique)
+- password (hashed)
+- full_name
+- is_active
+- created_at
+- updated_at
+
+### Role
+- id
+- name (unique)
+- description
+- created_at
+- updated_at
+
+### Menu
+- id
+- menu_name
+- menu_code (unique)
+- parent_id
+- menu_order
+- is_active
+- created_at
+- updated_at
+
+### UserRole (junction table)
+- user_id
+- role_id
+
+### RoleMenu (junction table)
+- role_id
+- menu_id
+- can_create
+- can_update
+- can_delete
+
+---
+
 ## Daftar Isi
 
 1. [Authentication](#authentication)
@@ -1396,43 +1437,3 @@ Import file `Management Access.postman_collection.json` ke Postman untuk testing
 3. Set token di Authorization Bearer untuk endpoint lainnya
 4. Test semua endpoint sesuai kebutuhan
 
----
-
-## Database Models
-
-### User
-- id
-- username (unique)
-- password (hashed)
-- full_name
-- is_active
-- created_at
-- updated_at
-
-### Role
-- id
-- name (unique)
-- description
-- created_at
-- updated_at
-
-### Menu
-- id
-- menu_name
-- menu_code (unique)
-- parent_id
-- menu_order
-- is_active
-- created_at
-- updated_at
-
-### UserRole (junction table)
-- user_id
-- role_id
-
-### RoleMenu (junction table)
-- role_id
-- menu_id
-- can_create
-- can_update
-- can_delete
