@@ -54,60 +54,7 @@
 
 ### Database Schema Visualization
 
-```mermaid
-erDiagram
-    users ||--o{ user_roles : "has"
-    roles ||--o{ user_roles : "has"
-    roles ||--o{ role_menus : "has"
-    menus ||--o{ role_menus : "has"
-    menus ||--o{ menus : "parent-child"
-
-    users {
-        int id PK
-        string username UK
-        string password
-        string full_name
-        boolean is_active
-        datetime created_at
-        datetime updated_at
-    }
-
-    roles {
-        int id PK
-        string name UK
-        string description
-        datetime created_at
-        datetime updated_at
-    }
-
-    menus {
-        int id PK
-        string menu_name
-        string menu_code UK
-        int parent_id FK
-        int menu_order
-        boolean is_active
-        datetime created_at
-        datetime updated_at
-    }
-
-    user_roles {
-        int user_id FK
-        int role_id FK
-        datetime created_at
-        datetime updated_at
-    }
-
-    role_menus {
-        int role_id FK
-        int menu_id FK
-        boolean can_create
-        boolean can_update
-        boolean can_delete
-        datetime created_at
-        datetime updated_at
-    }
-```
+![ERD](https://i.imgur.com/HAyu73P.png)
 
 **Keterangan Relasi:**
 - **users ↔ roles**: Many-to-Many melalui tabel `user_roles` (User dapat memiliki banyak role, Role dapat dimiliki banyak user)
@@ -117,7 +64,6 @@ erDiagram
 **Key Constraints:**
 - `PK` = Primary Key
 - `FK` = Foreign Key
-- `UK` = Unique Key
 
 ---
 
